@@ -21,10 +21,24 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+% Add bias units to X
+X = [ones(m, 1) X];
 
+% Compute activation units (a2) for 2nd layer using inputs
+% from the first layer (X)
+a2 = sigmoid(X * Theta1');
 
+% Add bias units to a2
+a2 = [ones(m,1) a2];
 
+% Compute activation units (a3) for output layer 3 using data
+% from the second layer (a2)
+a3 = sigmoid (a2 * Theta2');
 
+% Determine predictions from the max cost values in layer 3
+[maxVals p] = max(a3, [], 2);
+
+p;
 
 
 

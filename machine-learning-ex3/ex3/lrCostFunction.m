@@ -36,15 +36,15 @@ grad = zeros(size(theta));
 %           grad = grad + YOUR_CODE_HERE (using the temp variable)
 %
 
-disp("X: "), disp(X);
-disp("theta: "), disp(theta);
-disp("y: "), disp(y);
+%disp("X: "), disp(X);
+%disp("theta: "), disp(theta);
+%disp("y: "), disp(y);
 
 theta2 = theta(2:size(theta, 1), :);
 sig = sigmoid(X * theta);
 
-disp("\nsigmoid:"), disp(sig);
-disp("theta2"), disp(theta2 );
+%disp("\nsigmoid:"), disp(sig);
+%disp("theta2"), disp(theta2 );
 
 
 

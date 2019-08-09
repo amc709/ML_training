@@ -30,10 +30,13 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
+% Cost function
+h = sigmoid(X * all_theta');
 
+% Get maximum cost values for each number label.
+[maxVals p] = max(h, [], 2);
 
-
-
+p;
 
 
 % =========================================================================

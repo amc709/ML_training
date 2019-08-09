@@ -24,7 +24,7 @@ theta2 = theta(2:size(theta, 1), :);
 sig = sigmoid(X * theta);
 
 % Cost
-J = (1/m) * (-y' * log(sig) - (1-y)'*log(1-sig)) + (lambda/(2*m)) * (theta2' * theta);
+J = (1/m) * (-y' * log(sig) - (1-y)'*log(1-sig)) + (lambda/(2*m)) * (theta2' * theta2);
 
 % Gradient
 grad0 = (1/m) * ((sig - y)' * X(:,1));
