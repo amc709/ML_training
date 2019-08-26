@@ -63,68 +63,40 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
-% ********* PART 1:  Forward propagation **********
+% % ********* PART 1:  Forward propagation **********
 
-% disp("size of y"), size(y)
-% disp("size of X"), size(X)
-% disp("size of Theta1"), size(Theta1)
-% disp("size of Theta2"), size(Theta2)
-% disp("size of hidden layer"), hidden_layer_size
-% disp("num_labels"), num_labels
+% % disp("size of y"), size(y)
+% % disp("size of X"), size(X)
+% % disp("size of Theta1"), size(Theta1)
+% % disp("size of Theta2"), size(Theta2)
+% % disp("size of hidden layer"), hidden_layer_size
+% % disp("num_labels"), num_labels
 
 
-% Create vector for the output labels
+% % Create vector for the output labels
 ylabels = 1:num_labels;
 
-% Create matrix Y with m rows and num_labels column
+% % Create matrix Y with m rows and num_labels column
 Y = zeros(m, num_labels);
 for i = 1:size(Y, 1)
     Y(i,:) = (ylabels == y(i,:)); 
 endfor
 
-% **** Layer 2 ****
-% Add bias units to input data
-X = [ones(size(X,1),1) X];
+% % **** Layer 2 ****
+% % Add bias units to input data
+A1 = [ones(size(X,1),1) X];
+ 
+% % Compute activation units for 2nd (hidden) layer
+Z2 = A1 * Theta1';
+H2 = sigmoid(Z2);
 
-% Compute activation units for 2nd (hidden) layer
-H2 = sigmoid(X * Theta1');
+% % **** (Output) Layer 3 ****
+A2 = [ones(size(Z2,1), 1) H2]; 
+H3 = A3 =  sigmoid(A2 * Theta2');
 
-% disp("H2"), size(H2)
+J = (1/m)*sum(sum((-Y).*log(H3) - (1-Y).*log(1 - H3), 2));
 
-% **** (Output) Layer 3 ****
-H2 = [ones(size(H2,1), 1) H2];
-H3 = sigmoid(H2 * Theta2');
-
-disp("size of H3:"), size(H3);
-disp("size of Y:"), size(Y);
-
-
-%% THIS WORKS!!! 
-for i = 1:size(H3,1)
-    x_i = H3(i,:);
-
-    % Use ylabels vector that corresponds to the actual y value for the sample data
-    y_i = (ylabels == y(i,:));
-
-    % Compute cost for that sample data
-    temp = log(x_i) * - y_i' - log(1 - x_i) *(1 - y_i)';
-
-    % Add to cumulative cost J
-    J = J + temp;
-
-endfor
-
-% J = -(log(H3) * Y') - log(1-H3) * (1-Y)';
-
-
-
-
-
-
-% Divide total cost by the total sample size
-J = J / m ;
-
-% ********* Cost computation for regularization terms **********
+% % ********* Cost computation for regularization terms **********
  
 % Remove the bias columns
 theta1 = Theta1(:,2:end);
@@ -133,46 +105,86 @@ theta2 = Theta2(:,2:end);
 % Total regularization term cost
 total_reg = (lambda /(2 * m)) * (sum(sum(theta1 .^ 2, 2)) + sum(sum(theta2 .^ 2, 2)));
 
-% ********* Total cost function **********
+% % ********* Total cost function **********
 J = J + total_reg;
-J;
+% J;
 
 
-% ********* PART 2:  Backpropagation **********
+% % ********* PART 2:  Backpropagation **********
 
-disp("size of y"), size(y)
-disp("size of H3"), size(H3)
-disp("size of H2"), size(H2)
-disp("size of Theta2"), size(Theta2)
-disp("size of Theta1"), size(Theta1)
+% disp("size of y"), size(y)
+% disp("size of H3"), size(H3)
+% disp("size of H2"), size(H2)
+% disp("size of Theta2"), size(Theta2)
+% disp("size of Theta1"), size(Theta1)
 
-% Step 1
-A1 = X(:, 2:end);
-disp("size of A1"), size(A1)
+% % Step 1
+% A1 = X(:, 2:end);
+% disp("size of A1"), size(A1)
 
-% Step2:  Layer 3 (output layer)
-Sigma3 = zeros(size(H3));
-for i = 1 : size(H3, 1)
-    y_i = (ylabels == y(i,:));
-    Sigma3(i,:) = H3(i,:) - y_i;
-endfor
+% % Step2:  Layer 3 (output layer)
+% Sigma3 = zeros(size(H3));
+% for i = 1 : size(H3, 1)
+%     y_i = (ylabels == y(i,:));
+%     Sigma3(i,:) = H3(i,:) - y_i;
+% endfor
 
-disp("size of Sigma3"), size(Sigma3)
-size(sigmoidGradient(A1 * theta1'))
+% disp("size of Sigma3"), size(Sigma3)
+% size(sigmoidGradient(A1 * theta1'))
 
-% Step 3:  Layer 2 (hidden layer)
-Sigma2 = (Sigma3 * theta2) .* sigmoidGradient(A1 * theta1');
-disp("size of Sigma2"), size(Sigma2)
+% % Step 3:  Layer 2 (hidden layer)
+% Sigma2 = (Sigma3 * theta2) .* sigmoidGradient(A1 * theta1');
+% disp("size of Sigma2"), size(Sigma2)
 
-Delta1 = Sigma2' * X(:, 2:end);
-Delta2 = Sigma3' * H2(:, 2:end);
+% Delta1 = Sigma2' * X(:, 2:end);
+% Delta2 = Sigma3' * H2(:, 2:end);
 
-Theta1_grad = Delta1 ./ m;
-Theta2_grad = Delta2 ./ m;
+% Theta1_grad = Delta1 ./ m;
+% Theta2_grad = Delta2 ./ m;
 
-disp("Theta1_grad"), size(Theta1_grad)
-disp("Theta2_grad"), size(Theta2_grad)
-% =========================================================================
+% disp("Theta1_grad"), size(Theta1_grad)
+% disp("Theta2_grad"), size(Theta2_grad)
+
+
+
+
+
+% *********************************
+% *********************************
+% I = eye(num_labels);
+% Y = zeros(m, num_labels);
+% for i=1:m
+%   Y(i, :)= I(y(i), :);
+% end
+
+
+
+% A1 = [ones(m, 1) X];
+% Z2 = A1 * Theta1';
+% A2 = [ones(size(Z2, 1), 1) sigmoid(Z2)];
+% Z3 = A2*Theta2';
+% H = A3 = sigmoid(Z3);
+
+
+% penalty = (lambda/(2*m))*(sum(sum(Theta1(:, 2:end).^2, 2)) + sum(sum(Theta2(:,2:end).^2, 2)));
+
+% J = (1/m)*sum(sum((-Y).*log(H) - (1-Y).*log(1-H), 2));
+% J = J + penalty;
+
+Sigma3 = A3 - Y;
+Sigma2 = (Sigma3*Theta2 .* sigmoidGradient([ones(size(Z2, 1), 1) Z2]))(:, 2:end);
+
+
+Delta_1 = Sigma2'*A1;
+Delta_2 = Sigma3'*A2;
+
+
+Theta1_grad = Delta_1./m + (lambda/m)*[zeros(size(Theta1,1), 1) Theta1(:, 2:end)];
+Theta2_grad = Delta_2./m + (lambda/m)*[zeros(size(Theta2,1), 1) Theta2(:, 2:end)];
+
+
+
+% % =========================================================================
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
